@@ -33,24 +33,24 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
 //need to search if entry already exists here !!!!!!!
       $queryInsert ="INSERT INTO artCollection(artist)VALUES ($artist_es)";
       $file_db->exec($queryInsert);
-
+      echo "<p> input:: ".$artist."</p>";
       }
 
       catch(PDOException $e) {
         // Print PDOException message
         echo $e->getMessage();
       }
- if($_FILES)
-  {
-    //echo "file name: ".$_FILES['filename']['name'] . "<br />";
-    //echo "path to file uploaded: ".$_FILES['filename']['tmp_name']. "<br />";
-   $fname = $_FILES['filename']['name'];
-   // move_uploaded_file($_FILES['filename']['tmp_name'], "images/".$fname);
-    echo "done";
-
-    exit;
-
-  }//FILES
+ // if($_FILES)
+ //  {
+ //    //echo "file name: ".$_FILES['filename']['name'] . "<br />";
+ //    //echo "path to file uploaded: ".$_FILES['filename']['tmp_name']. "<br />";
+ //   // $fname = $_FILES['filename']['name'];
+ //   // move_uploaded_file($_FILES['filename']['tmp_name'], "images/".$fname);
+ //    echo "done";
+ //
+ //    exit;
+ //
+ //  }//FILES
 }//POST
 ?>
 
@@ -94,7 +94,7 @@ $(document).ready (function(){
     //Object.entries() method in JavaScript returns an array consisting of
     //enumerable property [key, value] pairs of the object.
     for (let valuePairs of data.entries()) {
-    console.log(valuePairs[0]+ ', ' + valuePairs[1]);
+    console.log("valuePairs:: " + valuePairs[0]+ ', ' + valuePairs[1]);
   }
 
   $.ajax({
@@ -109,42 +109,58 @@ $(document).ready (function(){
             success: function (response) {
             //reponse is a STRING (not a JavaScript object -> so we need to convert)
             console.log("we had success!");
-            console.log(response);
+            // console.log(response);
             //use the JSON .parse function to convert the JSON string into a Javascript object
             // let parsedJSON = JSON.parse(response);
             // console.log(parsedJSON);
-            // displayResponse(parsedJSON);
+            // displayResponse();
+            let container = $('<div>').addClass("outer");
+            let title = $('<h3>');
+            for (let valuePairs of data.entries()) {
+              $(title).text("Results from user-->"+valuePairs[1]);
+
+            }
+
+            $(title).appendTo(container);
+            let contentContainer = $('<div>').addClass("content");
+            $(contentContainer).appendTo(container);
+            $(container).appendTo("#result");
            },
            error:function(){
           console.log("error occurred");
         }
       });
-$( "#result" ).load( "viewResults.php" );
+// $( "#result" ).load( "viewResults.php" );
    });
    // validate and process form here
-    function displayResponse(theResult){
+    function displayResponse(){
+
       let container = $('<div>').addClass("outer");
       let title = $('<h3>');
-      $(title).text("Results from user");
-      $(title).appendTo(container);
-      let contentContainer = $('<div>').addClass("content");
-      for (let property in theResult) {
-        console.log(property);
-        if(property ==="fileName"){
-          let img = $("<img>");
-          $(img).attr('src','images/'+theResult[property]);
-
-          $(img).appendTo(contentContainer);
-        }
-        else{
-          let para = $('<p>');
-          $(para).text(property+"::" +theResult[property]);
-            $(para).appendTo(contentContainer);
-        }
+      for (let valuePairs of data.entries()) {
+        $(title).text("Results from user"+valuePairs[1]);
 
       }
-      $(contentContainer).appendTo(container);
-      $(container).appendTo("#result");
+
+      $(title).appendTo(container);
+      let contentContainer = $('<div>').addClass("content");
+      // for (let property in theResult) {
+      //   console.log(property);
+      //   if(property ==="fileName"){
+      //     let img = $("<img>");
+      //     $(img).attr('src','images/'+theResult[property]);
+      //
+      //     $(img).appendTo(contentContainer);
+      //   }
+      //   else{
+      //     let para = $('<p>');
+      //     $(para).text(property+"::" +theResult[property]);
+      //       $(para).appendTo(contentContainer);
+      //   }
+      //
+      // }
+      // $(contentContainer).appendTo(container);
+      // $(container).appendTo("#result");
     }
 });
 </script>
